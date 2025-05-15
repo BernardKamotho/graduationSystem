@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Congratulations Class of 2025</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poetsen+One&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        color: white;
+        overflow-x: hidden;
+        min-height: 100vh;
+      }
+
+      @keyframes slideFadeDown {
+        0% {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes flyIn {
+        0% {
+          opacity: 0;
+          transform: translate(var(--x), var(--y)) scale(0.5) rotate(var(--r));
+        }
+        60% {
+          opacity: 1;
+          transform: translate(0, 0) scale(1.1) rotate(0deg);
+        }
+        100% {
+          opacity: 1;
+          transform: translate(0, 0) scale(1) rotate(0deg);
+        }
+      }
+
+      header {
+        text-align: center;
+        padding: 1.5rem 0;
+        background: #d0dd45;
+        position: fixed;
+        width: 100%;
+        z-index: 100;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        animation: slideFadeDown 1.2s ease-out;
+      }
+
+      #animated-title {
+        font-family: "Poetsen One", sans-serif;
+        font-weight: 400;
+        font-size: 4rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.1em;
+        margin: 0;
+        color: #0f1864;
+        text-shadow: 0 0 15px #0f1864, 0 0 30px #0f1864;
+        user-select: none;
+        align-items: center;
+      }
+
+      .letter {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 1;
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(0.5) rotate(var(--r));
+        animation: flyIn 1s ease-out forwards;
+        animation-fill-mode: forwards;
+        color: #fcf81d;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+      }
+
+      .emoji {
+        font-size: 4rem;
+        margin: 0 0.15em;
+        user-select: none;
+        filter: drop-shadow(0 0 8px rgba(255, 242, 0, 0.6));
+      }
+
+      #slideshow {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        padding-top: 100px;
+      }
+
+      .slide-container {
+        width: 100%;
+        height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .slide {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 1s cubic-bezier(0.33, 0, 0.2, 1);
+        z-index: 1;
+      }
+
+      .slide img {
+        max-width: 95vw;
+        max-height: 85vh;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.5s ease;
+      }
+
+      /* Active slide (center) */
+      .slide.active {
+        transform: translateX(0) scale(1);
+        opacity: 1;
+        z-index: 3;
+      }
+
+      /* Previous slide (left side) */
+      .slide.prev-slide {
+        transform: translateX(-40%) scale(0.85);
+        opacity: 0.2;
+        z-index: 2;
+        filter: brightness(0.7);
+      }
+
+      /* Next slide (right side) */
+      .slide.next-slide {
+        transform: translateX(40%) scale(0.85);
+        opacity: 0.2;
+        z-index: 2;
+        filter: brightness(0.7);
+      }
+
+      /* Slides further away */
+      .slide.prev-slide-2 {
+        transform: translateX(-90%) scale(0.7);
+        opacity: 0.4;
+        z-index: 1;
+        filter: brightness(0.5);
+      }
+
+      .slide.next-slide-2 {
+        transform: translateX(90%) scale(0.7);
+        opacity: 0.4;
+        z-index: 1;
+        filter: brightness(0.5);
+      }
+
+      /* Hidden slides */
+      .slide.hidden {
+        opacity: 0;
+        z-index: 0;
+      }
+
+      .nav-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 242, 0, 0.2);
+        color: white;
+        border: none;
+        font-size: 3rem;
+        padding: 1rem;
+        cursor: pointer;
+        z-index: 10;
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .nav-btn:hover {
+        background: rgba(255, 242, 0, 0.4);
+        transform: translateY(-50%) scale(1.1);
+      }
+
+      .prev {
+        left: 2rem;
+      }
+
+      .next {
+        right: 2rem;
+      }
+
+      /* Progress indicator */
+      .progress-container {
+        position: absolute;
+        bottom: 30px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        z-index: 10;
+      }
+
+      .progress-bar {
+        height: 4px;
+        width: 200px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+        margin: 0 5px;
+        overflow: hidden;
+      }
+      #shoutout-banner {
+        position: absolute;
+        top: 80px;
+        width: 100%;
+        text-align: center;
+        pointer-events: none;
+        z-index: 50;
+      }
+
+      #shoutout-banner h2 {
+        font-family: "Poetsen One", cursive;
+        font-size: 2.5rem;
+        color: #ffffff;
+        max-width: 80%;
+        padding: 0.5rem 1rem;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 30px;
+        display: inline-block;
+        animation: fadeName 3s infinite;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: #fff200;
+        transition: width linear;
+      }
+
+      /* Floating dots navigation */
+      .dots-nav {
+        position: absolute;
+        bottom: 80px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        z-index: 10;
+      }
+
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .dot.active {
+        background: #fff200;
+        transform: scale(1.3);
+      }
+
+      .dot:hover {
+        transform: scale(1.3);
+      }
+
+      @media (max-width: 768px) {
+        #animated-title {
+          font-size: 2.5rem;
+        }
+        .emoji {
+          font-size: 2.5rem;
+        }
+        .slide.prev-slide {
+          transform: translateX(-50%) scale(0.8);
+        }
+        .slide.next-slide {
+          transform: translateX(50%) scale(0.8);
+        }
+        .slide.prev-slide-2,
+        .slide.next-slide-2 {
+          opacity: 0;
+        }
+        .nav-btn {
+          width: 50px;
+          height: 50px;
+          font-size: 2rem;
+        }
+      }
+
+      #shoutout-footer {
+        padding: 1rem 1rem;
+        text-align: center;
+        font-family: "Poetsen One", cursive;
+        color: #ffffff;
+        /* border-top: 2px solid rgba(255, 255, 255, 0.1)/\; */
+        /* box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5); */
+        position: relative;
+        animation: fadeInUp 2s ease-in-out;
+      }
+
+      .footer-content h2 {
+        margin: 0.5rem 0 0 0;
+        font-size: 4rem;
+        color: #ffffff;
+        animation: fadeName 3s infinite;
+      }
+
+      @keyframes fadeName {
+        0%,
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        50% {
+          opacity: 0.7;
+          transform: translateY(-10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .footer-content h2 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 id="animated-title" aria-label="Congratulations Class of 2025">
+        <span class="emoji" aria-hidden="true">🎓</span>
+        <!-- Animated letters inserted here -->
+        <span class="emoji" aria-hidden="true">🎉</span>
+      </h1>
+
+      <!-- Shoutout Banner -->
+      <div id="shoutout-banner ">
+        <h2 id="name-shoutout">🎉 Shoutout to Alice Johnson!</h2>
+      </div>
+    </header>
+
+    <main>
+      <div id="slideshow" class="active-view">
+        <div class="slide-container">
+          {% for image in images %}
+          <div class="slide {% if loop.first %}active{% endif %}">
+            <img
+              src="{{ image }}"
+              loading="eager"
+              alt="Memory {{ loop.index }}"
+            />
+          </div>
+          {% endfor %}
+        </div>
+        <button class="nav-btn prev" onclick="changeSlide(-1)">❮</button>
+        <button class="nav-btn next" onclick="changeSlide(1)">❯</button>
+        <div class="dots-nav"></div>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+          // Animate each letter except emojis
+          const rawText = " Congratulations Class of 2025 ";
+          const titleContainer = document.getElementById("animated-title");
+          const directions = [
+            { x: "-100vw", y: "0" },
+            { x: "100vw", y: "0" },
+            { x: "0", y: "-100vh" },
+            { x: "0", y: "100vh" },
+            { x: "-100vw", y: "-100vh" },
+            { x: "100vw", y: "-100vh" },
+            { x: "-100vw", y: "100vh" },
+            { x: "100vw", y: "100vh" },
+          ];
+
+          function createLetters() {
+            // Clear existing letters (except emojis)
+            const letters = document.querySelectorAll('.letter');
+            letters.forEach(letter => letter.remove());
+
+            // Create new letters
+            rawText.split("").forEach((char, index) => {
+              const span = document.createElement("span");
+              span.textContent = char;
+
+              const dir = directions[Math.floor(Math.random() * directions.length)];
+              const rotation = `${Math.floor(Math.random() * 60 - 30)}deg`;
+
+              span.style.setProperty("--x", dir.x);
+              span.style.setProperty("--y", dir.y);
+              span.style.setProperty("--r", rotation);
+              span.style.animationDelay = `${index * 0.05}s`;
+
+              span.classList.add("letter");
+              titleContainer.insertBefore(span, titleContainer.querySelector(".emoji:last-child"));
+            });
+          }
+
+          // Initial creation of letters
+          createLetters();
+
+          // Set up repeating animation every 20 seconds
+          function startLetterAnimationLoop() {
+            createLetters();
+            setTimeout(startLetterAnimationLoop, 20000);
+          }
+
+          // Start the repeating animation after initial animation completes
+          setTimeout(startLetterAnimationLoop, 1000);
+
+          // Slideshow logic
+          const images = {{ images|tojson }};
+          let slideIndex = 0;
+          let slideInterval;
+          const slideDuration = 4000;
+          const confettiTriggeredIndexes = new Set();
+          const progressFill = document.querySelector('.progress-fill');
+          const dotsContainer = document.querySelector('.dots-nav');
+
+          // Create dots navigation
+          function createDots() {
+            dotsContainer.innerHTML = '';
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, index) => {
+              const dot = document.createElement('div');
+              dot.classList.add('dot');
+              if (index === slideIndex) dot.classList.add('active');
+              dot.addEventListener('click', () => {
+                goToSlide(index);
+              });
+              dotsContainer.appendChild(dot);
+            });
+          }
+
+          function updateDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+              if (index === slideIndex) {
+                dot.classList.add('active');
+              } else {
+                dot.classList.remove('active');
+              }
+            });
+          }
+
+          function goToSlide(index) {
+            stopSlideshow();
+            slideIndex = index;
+            updateSlideClasses();
+            updateDots();
+            startSlideshow();
+          }
+
+          function updateSlideClasses() {
+            const slides = document.querySelectorAll(".slide");
+            const totalSlides = slides.length;
+
+            slides.forEach((slide, index) => {
+              // Reset all classes
+              slide.className = 'slide';
+
+              // Calculate relative positions
+              let diff = (index - slideIndex + totalSlides) % totalSlides;
+              if (diff > totalSlides / 2) diff -= totalSlides;
+
+              // Apply appropriate classes
+              if (index === slideIndex) {
+                slide.classList.add("active");
+              } else if (diff === -1 || diff === totalSlides - 1) {
+                slide.classList.add("prev-slide");
+              } else if (diff === 1 || diff === -totalSlides + 1) {
+                slide.classList.add("next-slide");
+              } else if (diff === -2 || diff === totalSlides - 2) {
+                slide.classList.add("prev-slide-2");
+              } else if (diff === 2 || diff === -totalSlides + 2) {
+                slide.classList.add("next-slide-2");
+              } else {
+                slide.classList.add("hidden");
+              }
+            });
+          }
+
+          function showSlide(n) {
+            const slides = document.querySelectorAll(".slide");
+            const totalSlides = slides.length;
+            slideIndex = (n + totalSlides) % totalSlides;
+
+            updateSlideClasses();
+            updateDots();
+
+            // Reset and animate progress bar
+            progressFill.style.width = '0%';
+            progressFill.style.transition = 'none';
+            setTimeout(() => {
+              progressFill.style.transition = `width ${slideDuration/1000}s linear`;
+              progressFill.style.width = '100%';
+            }, 10);
+
+            // Fire confetti on every 3rd slide
+            if (slideIndex % 2 === 0 && !confettiTriggeredIndexes.has(slideIndex)) {
+              confettiTriggeredIndexes.add(slideIndex);
+              fireRandomConfetti();
+            }
+          }
+
+          function changeSlide(n) {
+            stopSlideshow();
+            showSlide(slideIndex + n);
+            startSlideshow();
+          }
+
+          function startSlideshow() {
+            stopSlideshow();
+            slideInterval = setInterval(() => changeSlide(1), slideDuration);
+          }
+
+          function stopSlideshow() {
+            clearInterval(slideInterval);
+          }
+
+          function fireRandomConfetti() {
+            const count = 200;
+            const defaults = {
+              origin: { y: Math.random() * 0.6 },
+            };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            const shapes = ["square", "circle", "star"];
+            const angles = [60, 120, 90, 45];
+
+           for (let i = 0; i < 4; i++) {
+              confetti(
+                Object.assign({}, defaults, {
+                  particleCount: Math.floor(count / 3), // Larger burst
+                  spread: randomInRange(90, 180),       // Wider spread
+                  angle: angles[Math.floor(Math.random() * angles.length)],
+                  origin: {
+                    x: Math.random(),
+                    y: Math.random() * 0.5,
+                  },
+                  shapes: [shapes[Math.floor(Math.random() * shapes.length)]],
+                  scalar: randomInRange(1.2, 2.0), // Bigger particles
+                  colors: [
+                    '#fff200', '#ffffff', '#ffd700', // gold & white
+                    '#ff6ec7', '#7873f5',           // purple & pink
+                    '#4adeff', '#00d8ff',           // light blue & cyan
+                    '#00ff87', '#39ff14',           // neon green & lime
+                    '#ff4d4d', '#ff9999'            // red shades
+                  ],
+                  ticks: 200,                        // Longer animation duration
+                  gravity: randomInRange(0.6, 1.0), // Randomize fall speed
+                  drift: randomInRange(-1, 1)        // Slight left/right drift
+                })
+              );
+            }
+          }
+
+          document.addEventListener("DOMContentLoaded", () => {
+            // Initialize slideshow with preview slides
+            createDots();
+            updateSlideClasses();
+            startSlideshow();
+
+            document.addEventListener("keydown", (e) => {
+              if (e.key === "ArrowLeft") changeSlide(-1);
+              if (e.key === "ArrowRight") changeSlide(1);
+              if (e.key === " ") {
+                if (slideInterval) stopSlideshow();
+                else startSlideshow();
+              }
+            });
+          });
+
+          // List of names to display in the footer
+      const shoutoutNames = [
+          "Walukwe Isaac",
+          "Konya Lavanne Hope Chisira",
+          "Kibet Tia Jeptoo",
+          "Gabriel Kanyo",
+          "Joselyne Mwaghoti Kihara",
+          "Brian Muuo Muema",
+          "Gibson Witira Omieno",
+          "Clare Wanjiru Karenju",
+          "Igori Gibson Chege",
+          "Joseph Mbuthia",
+          "Joyce Cherotich",
+          "Kiragu Brian Kavunji",
+          "Mark Anthony",
+          "Ritah Wanjiru Githui",
+          "Wanyango Pius Ndubi",
+          "Timayio Reuben Ngotiek",
+          "Loile Ignatius Toroitich",
+          "Joshua Odanga Gitata",
+          "Sandra Karimi",
+          "Ndegwa Hedwig Wanjira",
+          "Fahim Issah",
+          "Jason Mbugua Gitau",
+          "Maurice Denzel Okuthe",
+          "Keith Kipngetich",
+          "Mike Kiarie Mwangi",
+          "Evans Kyalo Wambua",
+          "Omondi Daniel Odera",
+          "Suleiman Naqi Lubisia Sindano",
+          "Libendi Shantel Rachel",
+          "M'mbetsa Farouk Beja",
+          "Kihanya Charles Njuguna",
+          "Valentino Koome",
+          "Oula Patrick Midumbi",
+          "Kiboi Bravin Kibet",
+          "Ondengi Christopher Omboba",
+          "Wambura Fidel Maroa",
+          "Leonard Oyaro",
+          "Barbra Amondi Obado",
+          "Munyoroku Joseph Muchemi",
+          "Neddy Ombogo Nyangao",
+          "Karoga Grace Nyambura",
+          "Momanyi Ann Wambui",
+          "Wambua Ian Peter",
+          "Denis Kimani",
+          "Ndirangu Valentino Samuel",
+          "Kinyua Virginia Nyawira",
+          "Muriuki Blessings Wanjiru",
+          "Mwathi Vanessa Wangari",
+          "Musinga Joshua Muthwii",
+          "Danzel Jafferson",
+          "Velma Mwendwa",
+          "Mutembei Emmanuel Ndereva",
+          "Jabin Achuman Ekaran",
+          "Ochieng Fortune",
+          "Francis Rukungu Wangari",
+          "Leo Chrisben Evan",
+          "Kennedy Kipkirui",
+          "Baraka Muya Mwangi",
+          "Yolanda Nandasaba",
+          "Wanyama Chrispinus Mola",
+          "Francis Bahati",
+          "Muchina Steve Kamau",
+          "Paul Kanyiri",
+          "Misigo Faith Muyuga",
+          "Einstain Eddy Evans",
+          "Tim Mwathi",
+          "Yusuf kiptoo",
+          "Ndolo Rachael Wanza",
+          "Konzolo Hillary Kimathi",
+          "Shelmith Njeri",
+          "David Wisdom Oyedepo",
+          "Kinuthia Bernard Mungara",
+          "Ignasius Araka",
+          "Raphael Gregory",
+          "Swabrina Maawiya",
+          "Richard Thiongo Macharia",
+          "Githahu Esther Wanjiru",
+          "Tutu Samuel Gichira",
+          "Joan Makena",
+          "Claudia Wambui Njoroge",
+          "Yasmin Hassan Wanjiru",
+          "Zakaria Ali Ahmed",
+          "Mirlan Wangui Njoroge",
+          "Kinyua Alex Mutugi",
+          "Magua Victor Ngugi",
+          "Namare Samuel Greg",
+          "Karume Emmanuel Thuo",
+          "Mutie Anthony Katiku",
+          "Jason Kimutai Kangogo",
+          "Hamdhan Hawa Musa",
+          "Lavenda Madahana",
+          "Martha Wangui Njenga",
+          "Wagacha Bernice Wangui",
+          "Murithii Chloe Wanjiru",
+          "Otanga Alvin Emmanuel",
+          "Kerosi Carl Bosire",
+          "Calvins Sheanice Eness",
+          "Akunga Victor Onguti",
+          "Juliet Stephanie Cheyech",
+          "Thara Wayne Njuguna",
+          "Precious Angel",
+          "Musembi Peter Joshua",
+          "Joseph Mwangi",
+          "Alban Emmanuel mwangi Githinji",
+          "Elizabeth Makokha",
+          "Adrian Munyasia",
+          "Collins Ngote",
+          "Ngoomi Juliet Wanjiku",
+          "Omuga Grace Murathime",
+          "Emmanuel Mutua",
+          "Hamilton mwaila",
+          "Thuita Albert Gitonga",
+          "Clinton Ndolo",
+          "Wachira Michael Elvis Ngamau",
+          "Blessen Lihalo Lumbede",
+          "Ravis Ochieng",
+          "Kofia Cayden Mayavi",
+          "Gaspar Mwaniki Mwangi",
+          "Caleb Kiprotich Tuwai",
+          "Vincent Kipkogei Cheruiyot",
+          "Elisha Ebu Obarasa",
+          "Thomas Aquinus Etyang",
+          "Ursula Njeri Wangui",
+          "Wayne Rooney Kionga",
+          "Salim Ramadhan",
+          "Wanjala Lydia Nafula",
+          "Yvonne Misango",
+          "Larry kibet Sumukwo",
+          "Davis Gakiavi Munyi",
+          "Michael Kiberenge Muturi",
+          "Wairimu Elius Maginga",
+          "Natasha Kendi Njeru",
+          "Grace Maina Njuguini",
+          "Franklin Muendo",
+          "Chasin Angel Mumo",
+          "Fobbs Rolfenson Ondari",
+          "Ondieki Anthony Magara",
+          "Muthiora Anita Wambui",
+          "Thuranira Nimrod Muthomi",
+          "Mumbi Hope Njoki",
+          "Yuri Christian Ng'apethur",
+          "Bright Orembo Obimbo",
+          "Angela Wairimu Ngunjiri",
+          "Jewel Chepngeno Bii",
+          "Boniface Gitu Muthoni",
+          "Leon kipchumba",
+          "Gathura Joshua George",
+          "Mutembei Benedict Mutwiri",
+          "James Ndungu Gathara",
+          "Simon Njenga Nduta",
+          "Brevin Kipng'etich Rotich",
+          "Mwaura Caleb Waweru",
+          "Mwaura Brian Mwangi",
+          "Maina Joy Waruguru",
+          "Cosmus Emmanuel",
+          "Alfred Onaya Malesi",
+          "William Abuka Omondi",
+          "Peter Mogire Nyagaka",
+          "Bethuel Kiplangat Rotich",
+          "John Kamau Macharia",
+          "Francis Omollo Anyanga",
+          "Rodgers Kennedy Kiplimo",
+          "Eddy Mose Ombui",
+          "Brian Mukhanya Shitambasi",
+          "John Tirike",
+          "Kimeu Alex Muuo",
+          "Brian Mwangi Mukuthu",
+          "Suleiman Abdullahi Abdinoor",
+          "Sarai Stacy Mueni",
+          "Kioko Danson Mutua",
+          "Derick Mwalimu",
+          "Samuel Muendo Musembi",
+          "Gabriel Odongo Abiero",
+          "Clein Onyancha",
+          "Joseph Abraham Saimi",
+          "Titus Nyabiya Morara",
+          "Victor Kimaru Kaptum",
+          "Ndegwa Chantal Mbula",
+          "Prince Baraka Onaya",
+          "Ivy Nabutolia Barasa",
+          "Hazaria Yusuf Echakara",
+          "Ryan Andrew Ochieng",
+          "Eliezer Barack Mwachugha Mwangemi",
+          "James Kiguru Juma",
+          "Macharia Stephen",
+          "Victor Mumo Mwendwa",
+          "Paul Kihara Michuki",
+          "Issa Husein",
+          "Pendo Amani Kunini",
+          "Leonard Michuki",
+          "Cynthia Koilege Jeptoo",
+          "Mwangi Michael Rubia",
+          "Anne Ndunge Musyoka",
+          "Hope Wanjiru Roda",
+          "Christine Kemunto Mwaniki",
+          "Morris Nderitu Mahugu",
+          "Lincolin Kipngetich Langat",
+          "Muriu Hildah Muthoni",
+          "Valarie Kwamboka Nyabich",
+          "Faith Lenny Mutuma",
+          "Gakura Stanley Gakungi",
+          "Abel Ndegwa Daniel",
+          "Stella Wanjiru Ng'ang'a",
+          "Nelly Naisula",
+          "Daniel Otieno Orambo",
+          "Nyagah Tonnex Munene",
+          "Ndundu Victor Ngwatu",
+          "Henry Simeon Nyamamba",
+          "Samwel Bosire",
+          "Gumo Sean",
+          "Ruth Achieno",
+          "Innocent W. Khaemba",
+          "Otieno Maggie Awuor",
+          "Kristian Otieno",
+          "Aloo John Brainy",
+          "Kamau Kevin Munjogu",
+          "Erick Mutwiri Njiru",
+          "Bernice Wanjiru Njuguna",
+          "Emmanuel Ndungu K",
+          "David Mogonchi Omworo",
+          "Sasha Wanjiru Njoroge",
+          "Patrick Gicheru Maina",
+          "Michael Njuguna Njuguna",
+          "Leken Meshack",
+          "Beth Wanjiru Muhia",
+          "Shaline Nelly Njeri Muriithi",
+          "Githua Mervin Macharia",
+          "Stanley Gaddaffi",
+          "Tekin Herbert Butaki",
+          "Michelle Wangechi Njogo",
+          "Edwin Mwai Festus",
+          "Kemboi Gloria Chepchirchir",
+          "Joel Odongo Judith",
+          "Okwany Israel Allen",
+          "Terryann Wangare Nduku",
+          "Dimples Mogere",
+          "Stephen Mwangi Nduati",
+          "Onesmus Sabato"
+
+
+      ];
+
+      const nameShoutout = document.getElementById("name-shoutout");
+      let currentNameIndex = 0;
+
+      function updateShoutoutName() {
+        nameShoutout.textContent = `🎉 Shoutout to ${shoutoutNames[currentNameIndex]}!`;
+        currentNameIndex = (currentNameIndex + 1) % shoutoutNames.length;
+      }
+
+      // Initial call and set interval
+      updateShoutoutName();
+      setInterval(updateShoutoutName, 5000); // Change every 5 seconds
+    </script>
+  </body>
+</html>
